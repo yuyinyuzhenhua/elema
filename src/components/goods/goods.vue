@@ -14,7 +14,7 @@
         <li v-for="item in goods" class="food-list food-list-hook" >
           <h1 class="title">{{item.name}}</h1>
           <ul>
-            <li v-for="food in item.foods" class="food-item border-1px">
+            <li v-for="food in item.foods" class="food-item border-1px"  @click="selectFood(food,$event)">
               <div class="icon">
                 <img width="57" height="57" :src="food.icon" alt="">
               </div>
@@ -38,6 +38,7 @@
       </ul>
     </div>
     <shop-cart ref="shopcart" :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shop-cart> 
+    <food @cart-add = "cartadd" :food="selectedFood" ref="food"></food>
   </div>
 </template>
 
@@ -46,6 +47,7 @@
     import BScroll from 'better-scroll'
     import shopCart from 'components/shopcart/shopcart'
     import cartcontrol from 'components/cartcontrol/cartcontrol'
+    import food from 'components/food/food'
 
     export default{
       props:{
@@ -57,7 +59,8 @@
         return{
           goods:[],
           listHeight:[],
-          scrollY:0
+          scrollY:0,
+          selectedFood:{}
         }
       },
       created(){
@@ -110,6 +113,13 @@
         },
         cartadd(target){
           this._drop(target)
+        },
+        selectFood(food,event){
+          if(!event._constructed){  //原生的浏览器派发事件时没有_constructed,只有当自己派发的事件时在走到下面的逻辑
+            return
+          }          
+          this.selectedFood = food;
+          this.$refs.food.show()
         }
       },
       computed:{
@@ -137,7 +147,8 @@
       },
       components:{
         shopCart,
-        cartcontrol
+        cartcontrol,
+        food
       }
     }
 </script>
