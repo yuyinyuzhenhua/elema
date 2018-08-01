@@ -20,6 +20,7 @@
 
 <script>
     import Mhead from './components/header/header';
+    import {urlParse} from 'common/js/util'
 
 
     const ERR_OK = 0;
@@ -27,7 +28,13 @@
     export default {
       data(){
         return{
-          seller:{}
+          seller:{
+            id: (()=>{
+              let queryParam = urlParse();
+              console.log(queryParam.id);
+              return queryParam.id
+            })()
+          }
         }
       },
       created(){

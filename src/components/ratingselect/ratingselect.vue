@@ -11,7 +11,7 @@
               <span class="count">{{negatives.length}}</span>
           </span>
       </div>
-      <div class="switch">
+      <div class="switch" @click="toggleContent($event)" :class="{'on':onlyContent}">
         <span class="icon-check_circle"></span>
         <span class="text">只看有内容的评价</span>
       </div>
@@ -68,7 +68,14 @@
                 if (!event._constructed) {
                     return;
                 }
-                this.selectType = type;
+                // this.selectType = type;  //这是直接修改父组件传进来的值，由于是基本类型，父组件的这个值并不会发生改变
+                this.$emit('select',type);
+            },
+            toggleContent(event) {
+                if(!event._constructed) {
+                    return;
+                }
+                this.$emit('toggle');
             }
         }
     }
