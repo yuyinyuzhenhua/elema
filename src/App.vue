@@ -20,10 +20,11 @@
 
 <script>
     import Mhead from './components/header/header';
-    import {urlParse} from 'common/js/util'
+    import {urlParse} from 'common/js/util';
 
 
     const ERR_OK = 0;
+    const debug = process.env.NODE_ENV !== 'production';
 
     export default {
       data(){
@@ -31,16 +32,17 @@
           seller:{
             id: (()=>{
               let queryParam = urlParse();
-              console.log(queryParam.id);
               return queryParam.id
             })()
           }
         }
       },
       created(){
-        this.$http.get('/api/seller').then((res)=>{
-          if(res.body.errno === ERR_OK){
-            this.seller = res.body.data;
+        const url = debug ? '/api/seller' : 'http://ustbhuangyi.com/sell/api/seller'
+        this.$http.get(url + '?id=' + this.seller.id).then((res)=>{
+          res = res.body;
+          if(res.errno === ERR_OK){
+            this.seller = Object.assign({},this.seller,res.data);
           }
         })
       },

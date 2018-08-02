@@ -17,5 +17,5 @@ export function urlParse(){
             obj[key] = val;
         })
     }
-    return arr;
+    return obj;
 }
